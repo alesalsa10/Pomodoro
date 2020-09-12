@@ -1,0 +1,95 @@
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+html {
+  box-sizing: border-box;
+}
+.buttons {
+  padding: 0.4rem;
+  margin: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color:white;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.buttons:focus{
+  z-index:1;
+  position: relative;
+  outline: none;
+  border-radius: 20px;;
+}
+
+.buttons:focus::before{
+  content: "";
+  z-index: -1;
+  position: absolute;
+  opacity: 0.1;
+  background-color: rgb(255, 0, 0);
+  top: 0;
+  left:0;
+  right: 0;
+  bottom: 0;
+}
+#start-stop {
+  width: 150px;
+  background-color: white;
+  font-size:2rem;
+  border:none;
+  height: 3rem;
+  cursor: pointer;
+}
+
+#start-stop:focus{
+  outline: none;
+}
+
+.timer-card {
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  width: 50%;
+  padding: 1.2rem;
+  margin: 2.5rem auto;
+}
+
+.timer-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgb(255, 0, 0);
+  opacity: 0.1;
+  z-index: -1;
+  border-radius: 20px;
+}
+
+.action{
+  text-align: center;
+  color: white;
+  font-size: 1.5rem;;
+}
+
+.time{
+  font-size: 6rem;
+  color: white;
+}
+.heading{
+  color:white;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .timer-card {
+    width: 90%;
+  }
+  .buttons{
+    padding:0.2rem
+  }
+}
