@@ -1,7 +1,3 @@
-### About
-Timer using the pomodoro technique, which is based on the principle of taking a small break after a certain amount of work, 25 minutes being the standard and what was used here.
-<a href="https://pomodoro123.herokuapp.com/">Link</a>
-
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
