@@ -1,26 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import Button from './Button';
+import React, { useState, useEffect, useRef } from 'react';
 import audio from '../sounds/done.mp3';
-import audio2 from '../sounds/mouse-click.mp3';
 
 export default function Timer() {
-  const [minutes, setMinutes] = useState('25');
-  const [seconds, setSeconds] = useState('00');
+  const [minutes, setMinutes] = useState('00');
+  const [seconds, setSeconds] = useState('20');
   const [startCountdown, setStartCountdown] = useState(false);
-  const [backGroundColor, setBackgroundColor] = useState(
-    'rgba(83, 144, 217, 1)'
-  );
-  const [work, setWork] = useState(true);
+  const [action, setAction] = useState('START');
+  const [selected, setSelected] = useState('pomodoro');
+
+  const [totalTime, setTotalTime] = useState();
 
   let doneSound = new Audio(audio);
-  let clickSound = new Audio(audio2);
-  let bodyStyle = document.body.style;
-  bodyStyle.backgroundColor = backGroundColor;
 
   function updateTime() {
     if (minutes == 0 && seconds == 0) {
       doneSound.play();
       setStartCountdown(false);
+      setAction('DONE')
     } else {
       if (seconds == 0) {
         if (minutes > 0 && minutes <= 10) {
@@ -39,40 +35,34 @@ export default function Timer() {
   }
 
   const handleStartStopClick = (e) => {
-    if (e.target.className === 'start') {
+    if (e.target.id === 'start') {
       setStartCountdown(true);
-      clickSound.play();
+      setAction('PAUSE');
     } else {
       setStartCountdown(false);
-      clickSound.play();
+      setAction('START');
     }
   };
 
+  useEffect(() => {
+    setTotalTime(parseInt(minutes) * 60 + parseInt(seconds) +1);
+  }, [selected]);
+
   const handleClicks = (e) => {
+    setStartCountdown(false);
+    setAction('START')
     if (e.target.id === 'pomodoro') {
-      setMinutes('25');
-      setSeconds('00');
-      setBackgroundColor('rgba(83, 144, 217, 1)');
-      setWork(true);
-      bodyStyle.transition = '0.3s linear';
-      bodyStyle.backgroundColor = backGroundColor;
-      setStartCountdown(true);
+      setMinutes('00');
+      setSeconds('30');
+      setSelected('pomodoro');
     } else if (e.target.id === 'short-break') {
-      setMinutes('05');
-      setSeconds('00');
-      setWork(false);
-      setBackgroundColor('rgb(72, 191, 227, 1)');
-      bodyStyle.transition = '0.3s linear';
-      bodyStyle.backgroundColor = backGroundColor;
-      setStartCountdown(true);
+      setMinutes('00');
+      setSeconds('30');
+      setSelected('shortBreak');
     } else {
       setMinutes('10');
       setSeconds('00');
-      setWork(false);
-      setBackgroundColor('rgb(114, 239, 221)');
-      bodyStyle.transition = '0.3s linear';
-      bodyStyle.backgroundColor = backGroundColor;
-      setStartCountdown(true);
+      setSelected('longBreak');
     }
   };
 
@@ -81,55 +71,101 @@ export default function Timer() {
       const interval = setInterval(updateTime, 1000);
       return () => clearInterval(interval);
     }
-  }, [startCountdown, seconds]);
+  }, [startCountdown, seconds, minutes]);
 
   return (
     <div>
       <div className='timer-card'>
-        <Button
-          className='buttons'
-          value='Pomodoro'
-          onClick={handleClicks}
-          id='pomodoro'
-        />
-        <Button
-          className='buttons'
-          value='Short Break'
-          onClick={handleClicks}
-          id='short-break'
-        />
-        <Button
-          className='buttons'
-          value='Long Break'
-          onClick={handleClicks}
-          id='long-break'
-        />
-        <h1 className='time'>
-          <span>{minutes}</span>:<span>{seconds} </span>{' '}
-        </h1>
-        {startCountdown ? (
-          <Button
-            color={backGroundColor}
-            id='start-stop'
-            className='stop'
-            onClick={handleStartStopClick}
-            value='Stop'
+        <div className='buttons-div'>
+          <div
+            className={`${'buttons'} ${
+              selected === 'pomodoro' ? 'selected' : ''
+            } `}
+            id='pomodoro'
+            onClick={handleClicks}
+          >
+            Pomodoro
+          </div>
+          <div
+            className={`${'buttons'} ${
+              selected === 'shortBreak' ? 'selected' : ''
+            } `}
+            id='short-break'
+            onClick={handleClicks}
+          >
+            Short Break
+          </div>
+          <div
+            className={`${'buttons'} ${
+              selected === 'longBreak' ? 'selected' : ''
+            } `}
+            id='long-break'
+            onClick={handleClicks}
+          >
+            Long Break
+          </div>
+        </div>
+
+        <svg viewBox='0 0 10 10' width='30%'>
+          <circle
+            cx='5'
+            cy='5'
+            r='4'
+            strokeWidth='0.5'
+            stroke='#282b52'
+            fill='none'
           />
-        ) : (
-          <Button
-            color={backGroundColor}
-            id='start-stop'
-            className='start'
-            onClick={handleStartStopClick}
-            value='Start'
+          <circle
+            cx='5'
+            cy='5'
+            r='3.3'
+            fill='transparent'
+            stroke='#1b2242'
+            strokeWidth='0.3'
           />
-        )}
+
+          <circle
+            className='circle'
+            cx='5'
+            cy='5'
+            r='3.3'
+            key={selected}
+            fill='none'
+            stroke='#f57172'
+            strokeWidth='0.3'
+            style={{
+              animationDuration: `${totalTime}s `,
+              animationPlayState: `${
+                action === 'START' ? 'paused' : 'running'
+              }`,
+            }}
+          />
+
+          <text
+            x='5'
+            y='5'
+            textAnchor='middle'
+            fill='white'
+            alignmentBaseline='central'
+            fontSize='2px'
+          >
+            {minutes}:{seconds}
+          </text>
+          <text
+            x='5'
+            y='7'
+            textAnchor='middle'
+            fill='white'
+            alignmentBaseline='central'
+            fontSize='0.9px'
+            onClick={handleStartStopClick}
+            className={`${'startStop'} `}
+            id={`${startCountdown ? 'stop' : 'start'}`}
+          >
+            {action}
+          </text>
+        </svg>
       </div>
-      {work ? (
-        <p className='action'>Work Time</p>
-      ) : (
-        <p className='action'>Break time</p>
-      )}
     </div>
   );
 }

@@ -1,95 +1,67 @@
-*,
-*:before,
-*:after {
-  box-sizing: inherit;
-}
-html {
+body{
   box-sizing: border-box;
-}
-.buttons {
-  padding: 0.4rem;
-  margin: 1rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color:white;
-  font-size: 0.9rem;
-  font-weight: 500;
+  margin: 0;
+  padding: 0;
+  background-color: #1b2242
 }
 
-.buttons:focus{
-  z-index:1;
-  position: relative;
-  outline: none;
-  border-radius: 20px;;
-}
 
-.buttons:focus::before{
-  content: "";
-  z-index: -1;
-  position: absolute;
-  opacity: 0.1;
-  background-color: rgb(255, 0, 0);
-  top: 0;
-  left:0;
-  right: 0;
-  bottom: 0;
-}
-#start-stop {
-  width: 150px;
-  background-color: white;
-  font-size:2rem;
-  border:none;
-  height: 3rem;
-  cursor: pointer;
-}
 
-#start-stop:focus{
-  outline: none;
-}
 
-.timer-card {
-  text-align: center;
-  position: relative;
-  z-index: 1;
-  width: 50%;
-  padding: 1.2rem;
-  margin: 2.5rem auto;
-}
-
-.timer-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background-color: rgb(255, 0, 0);
-  opacity: 0.1;
-  z-index: -1;
-  border-radius: 20px;
-}
-
-.action{
-  text-align: center;
-  color: white;
-  font-size: 1.5rem;;
-}
-
-.time{
-  font-size: 6rem;
-  color: white;
-}
 .heading{
-  color:white;
+  text-align: center;
+  color: white;
+}
+
+.timer-card{
   text-align: center;
 }
 
-@media (max-width: 600px) {
-  .timer-card {
-    width: 90%;
-  }
-  .buttons{
-    padding:0.2rem
+.buttons{
+  cursor: pointer;
+  color:white;
+  padding: 1rem;
+}
+
+.buttons-div{
+  height: 50px;
+  margin: auto;
+  width: fit-content;
+  border-radius: 20px;
+  background-color: #151932;
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  align-items: center;
+  column-gap: 15px;
+  margin-bottom: 1rem;
+  padding: 0 0.3rem;
+}
+
+.startStop{
+  cursor: pointer;
+}
+
+.selected{
+  border-radius: 20px;
+  background-color: #f57172;
+  padding: 0.5rem;
+}
+
+
+.circle {
+  stroke-dasharray: 21;
+  stroke-dashoffset: 0;
+  animation-iteration-count: infinite;
+  animation-name: rotate;
+  animation-direction: normal;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+
+@keyframes rotate {
+  to {
+    stroke-dashoffset: 21;
   }
 }
