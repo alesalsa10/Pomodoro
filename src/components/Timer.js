@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import audio from '../sounds/done.mp3';
 
 export default function Timer() {
@@ -7,6 +7,7 @@ export default function Timer() {
   const [startCountdown, setStartCountdown] = useState(false);
   const [action, setAction] = useState('START');
   const [selected, setSelected] = useState('pomodoro');
+  const [indicator, setIndicator] = useState('');
 
   const [totalTime, setTotalTime] = useState();
 
@@ -46,11 +47,12 @@ export default function Timer() {
 
   useEffect(() => {
     setTotalTime(parseInt(minutes) * 60 + parseInt(seconds) +1);
-  }, [selected]);
+  }, [selected, indicator]);
 
   const handleClicks = (e) => {
     setStartCountdown(false);
     setAction('START')
+    setIndicator(Math.floor(Math.random() * 1000))
     if (e.target.id === 'pomodoro') {
       setMinutes('00');
       setSeconds('30');
@@ -130,6 +132,7 @@ export default function Timer() {
             cy='5'
             r='3.3'
             key={selected}
+            key={indicator}
             fill='none'
             stroke='#f57172'
             strokeWidth='0.3'
