@@ -1,36 +1,66 @@
 import React, { useState, useEffect } from 'react';
 import audio from '../sounds/done.mp3';
+import Modal from 'react-modal';
 
 export default function Timer() {
+  const [pomodoroTime, setPomodoroTime] = useState('25');
+  const [shortBreak, setShortBreak] = useState('05');
+  const [longBreak, setLongBreak] = useState('10');
   const [minutes, setMinutes] = useState('00');
-  const [seconds, setSeconds] = useState('20');
+  const [seconds, setSeconds] = useState('30');
   const [startCountdown, setStartCountdown] = useState(false);
   const [action, setAction] = useState('START');
   const [selected, setSelected] = useState('pomodoro');
   const [indicator, setIndicator] = useState('');
-
   const [totalTime, setTotalTime] = useState();
+  const [modalIsOpen, setIsOpen] = useState(false);
 
   let doneSound = new Audio(audio);
 
+  const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+    },
+    overlay: {
+      backgroundColor: 'rgba(0,0,0,0)',
+    },
+  };
+
+  Modal.setAppElement('body');
+
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
   function updateTime() {
-    if (minutes == 0 && seconds == 0) {
-      doneSound.play();
-      setStartCountdown(false);
-      setAction('DONE')
-    } else {
-      if (seconds == 0) {
-        if (minutes > 0 && minutes <= 10) {
-          setMinutes(`0${minutes - 1}`);
-          setSeconds(59);
-        } else {
-          setMinutes(minutes - 1);
-          setSeconds(59);
+    if (startCountdown) {
+      if (minutes == 0 && seconds == 0) {
+        doneSound.play();
+        setStartCountdown(false);
+        setAction('DONE');
+      } else {
+        if (seconds == 0) {
+          if (minutes > 0 && minutes <= 10) {
+            setSeconds(59);
+            setMinutes(`0${minutes - 1}`);
+          } else {
+            setSeconds(59);
+            setMinutes(minutes - 1);
+          }
+        } else if (seconds > 0 && seconds <= 10) {
+          setSeconds(`0${seconds - 1}`);
+        } else if (seconds > 10) {
+          setSeconds(seconds - 1);
         }
-      } else if (seconds > 0 && seconds <= 10) {
-        setSeconds(`0${seconds - 1}`);
-      } else if (seconds > 10) {
-        setSeconds(seconds - 1);
       }
     }
   }
@@ -46,33 +76,29 @@ export default function Timer() {
   };
 
   useEffect(() => {
-    setTotalTime(parseInt(minutes) * 60 + parseInt(seconds) +1);
+    setTotalTime(parseInt(minutes) * 60 + parseInt(seconds));
   }, [selected, indicator]);
 
   const handleClicks = (e) => {
     setStartCountdown(false);
-    setAction('START')
-    setIndicator(Math.floor(Math.random() * 1000))
+    setAction('START');
+    setIndicator(Math.floor(Math.random() * 1000));
+    setSeconds('00');
     if (e.target.id === 'pomodoro') {
-      setMinutes('00');
-      setSeconds('30');
+      setMinutes(pomodoroTime);
       setSelected('pomodoro');
     } else if (e.target.id === 'short-break') {
-      setMinutes('00');
-      setSeconds('30');
+      setMinutes(shortBreak);
       setSelected('shortBreak');
     } else {
-      setMinutes('10');
-      setSeconds('00');
+      setMinutes(longBreak);
       setSelected('longBreak');
     }
   };
 
   useEffect(() => {
-    if (startCountdown) {
-      const interval = setInterval(updateTime, 1000);
-      return () => clearInterval(interval);
-    }
+    const interval2 = setInterval(updateTime, 1000);
+    return () => clearInterval(interval2);
   }, [startCountdown, seconds, minutes]);
 
   return (
@@ -131,7 +157,6 @@ export default function Timer() {
             cx='5'
             cy='5'
             r='3.3'
-            key={selected}
             key={indicator}
             fill='none'
             stroke='#f57172'
@@ -168,6 +193,39 @@ export default function Timer() {
             {action}
           </text>
         </svg>
+      </div>
+      <div className='settingsImage'>
+        <img
+          src='https://cdn1.iconfinder.com/data/icons/interface-travel-and-environment/64/settings-cog-gear-interface-128.png'
+          alt='Settings Icon'
+          className='icon'
+          onClick={openModal}
+        />
+      </div>
+      <div className='modal'>
+        <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={closeModal}
+          style={customStyles}
+          contentLabel='Settings Modal'
+        >
+          <h2>Settings</h2>
+          <h3>TIME (MINUTES)</h3>
+          {/* <button onClick={closeModal}>close</button> */}
+          {/* <div>I am a modal</div>
+          <form>
+            <input />
+            <button>tab navigation</button>
+            <button>stays</button>
+            <button>inside</button>
+            <button>the modal</button>
+          </form> */}
+          <div className='configureTimes'>
+            <div className='pomodoro'></div>
+            <div className='shortBreak'></div>
+            <div className='longBreak'></div>
+          </div>
+        </Modal>
       </div>
     </div>
   );

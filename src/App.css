@@ -60,6 +60,20 @@ body{
   transform-origin: 50% 50%;
 }
 
+.settingsImage{
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.icon{
+  height: 35px;
+  cursor: pointer;
+}
+
+.modal{
+  background-color: none;
+}
+
 @keyframes rotate {
   to {
     stroke-dashoffset: 21;
