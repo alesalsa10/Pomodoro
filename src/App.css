@@ -1,3 +1,9 @@
+:root{
+  --red: #f87070;
+  --purple: #d981f9;
+  --blue:  #74f2f7;
+}
+
 body {
   box-sizing: border-box;
   margin: 0;
@@ -100,6 +106,61 @@ input[type="number"]::-webkit-inner-spin-button {
   border-left: 1px solid #d8d8d8;
   height: 34px;
   width: 23px;
+  cursor: pointer;
+}
+
+.configureFont{
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  display: grid;
+  grid-template-columns: 60% repeat(3, auto)
+}
+
+.configureColor{
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  display: grid;
+  grid-template-columns: 60% repeat(3, auto)
+}
+
+.header{
+  padding: 0;
+  margin: 0;
+  height: 35px;
+  line-height: 35px;
+}
+
+.color{
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  text-align: center;
+  line-height: 35px;
+}
+
+.colorRed{
+  background-color: var(--red);
+}
+
+.colorBlue{
+  background-color: var(--blue);
+}
+
+.colorPurple{
+  background: var(--purple);
+}
+
+.applyButton{
+  background-color: #f87070;
+  width: 80px;
+  padding: 1rem;
+  border-bottom-right-radius: 60px 50px;
+  border-top-right-radius: 60px 50px;
+  border-bottom-left-radius: 60px 50px;
+  border-top-left-radius: 60px 50px;
+  text-align: center;
+  margin: auto;
+  font-weight: 700;
   cursor: pointer;
 }
 

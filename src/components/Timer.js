@@ -6,6 +6,11 @@ export default function Timer() {
   const [pomodoroTime, setPomodoroTime] = useState('25');
   const [shortBreak, setShortBreak] = useState('05');
   const [longBreak, setLongBreak] = useState('10');
+
+  const [pomodoroSetting, setPomodoroSetting] = useState(pomodoroTime);
+  const [shortBreakSetting, setShortBreakSetting] = useState(shortBreak);
+  const [longBreakSetting, setLongBreakSetting] = useState(longBreak);
+
   const [minutes, setMinutes] = useState('25');
   const [seconds, setSeconds] = useState('00');
   const [startCountdown, setStartCountdown] = useState(false);
@@ -75,7 +80,7 @@ export default function Timer() {
     }
   };
 
-  const handleClicks = (e) => {
+  const handleTimeClicks = (e) => {
     setStartCountdown(false);
     setAction('START');
     setIndicator(Math.floor(Math.random() * 1000));
@@ -92,7 +97,34 @@ export default function Timer() {
     }
   };
 
-  
+  const handleNumberChange = e => {
+    if(e.target.id === 'pomodoro' ){
+      if (e.target.value < 10){
+        setPomodoroSetting(`0${e.target.value}`)
+      } else {
+        setPomodoroSetting(e.target.value)
+      }
+    } else if (e.target.id === 'shortBreak'){
+      if (e.target.value < 10){
+        setShortBreakSetting(`0${e.target.value}`)
+      } else {
+        setShortBreakSetting(e.target.value)
+      }
+    } else {
+      if (e.target.value < 10){
+        setLongBreakSetting(`0${e.target.value}`)
+      } else {
+        setLongBreakSetting(e.target.value)
+      }
+    }
+  }
+
+  const handleApplySettings = e => {
+    setPomodoroTime(pomodoroSetting)
+    setShortBreak(shortBreakSetting)
+    setLongBreak(longBreakSetting)
+    closeModal()
+  }
 
   useEffect(() => {
     setTotalTime(parseInt(minutes) * 60 + parseInt(seconds));
@@ -108,7 +140,17 @@ export default function Timer() {
       }
     }, 1000);
     return ()=> interval
-  }, [startCountdown, seconds]);
+  }, [startCountdown, seconds, minutes]);
+
+  useEffect(() => {
+    if (selected === 'pomodoro'){
+      setMinutes(pomodoroTime)
+    } else if (selected === 'shortBreak') {
+      setMinutes(shortBreak)
+    } else {
+      setMinutes(longBreak)
+    }
+  })
 
   return (
     <div>
@@ -119,7 +161,7 @@ export default function Timer() {
               selected === 'pomodoro' ? 'selected' : ''
             } `}
             id='pomodoro'
-            onClick={handleClicks}
+            onClick={handleTimeClicks}
           >
             Pomodoro
           </div>
@@ -128,7 +170,7 @@ export default function Timer() {
               selected === 'shortBreak' ? 'selected' : ''
             } `}
             id='short-break'
-            onClick={handleClicks}
+            onClick={handleTimeClicks}
           >
             Short Break
           </div>
@@ -137,7 +179,7 @@ export default function Timer() {
               selected === 'longBreak' ? 'selected' : ''
             } `}
             id='long-break'
-            onClick={handleClicks}
+            onClick={handleTimeClicks}
           >
             Long Break
           </div>
@@ -187,6 +229,7 @@ export default function Timer() {
             fontSize='2px'
           >
             {minutes}:{seconds}
+            
           </text>
           <text
             x='5'
@@ -219,30 +262,34 @@ export default function Timer() {
           contentLabel='Settings Modal'
         >
           <h2>Settings</h2>
-          <h3>TIME (MINUTES)</h3>
-          {/* <button onClick={closeModal}>close</button> */}
-          {/* <div>I am a modal</div>
-          <form>
-            <input />
-            <button>tab navigation</button>
-            <button>stays</button>
-            <button>inside</button>
-            <button>the modal</button>
-          </form> */}
+          <h4>TIME (MINUTES)</h4>
           <div className='configureTimes'>
             <div className='pomodoro'>
               <div className="header">pomodoro</div>
-              <input type="number" name="pomodoro" id="pomodoro" defaultValue={parseInt(pomodoroTime)} max='60' min='5' />
+              <input type="number" name="pomodoro" id="pomodoro" defaultValue={parseInt(pomodoroTime)} max='60' min='5' onChange={handleNumberChange} />
             </div>
             <div className='shortBreak'>
               <div className="header">short break</div>
-              <input type="number" name="shortBreak" id="shortBreak" defaultValue={parseInt(shortBreak)} max='15' min='1' />
+              <input type="number" name="shortBreak" id="shortBreak" defaultValue={parseInt(shortBreak)} max='15' min='1' onChange={handleNumberChange} />
             </div>
             <div className='longBreak'>
               <div className="header">long break</div>
-              <input type="number" name="longBreak" id="longBreak" defaultValue={parseInt(longBreak)} max='25' min='5' />
+              <input type="number" name="longBreak" id="longBreak" defaultValue={parseInt(longBreak)} max='25' min='5' onChange={handleNumberChange} />
             </div>
           </div>
+          <div className="configureFont">
+            <h4 className="header">FONT</h4>
+            <div className="font1">Aa</div>
+            <div className="font2">Aa</div>
+            <div className="font3">Aa</div>
+          </div>
+          <div className="configureColor">
+            <h4 className="header">COLOR</h4>
+            <div className="color colorRed ">Aa</div>
+            <div className="color colorBlue ">Aa</div>
+            <div className="color colorPurple ">Aa</div>
+          </div>
+          <div className="applyButton" onClick={handleApplySettings} >Apply</div>
         </Modal>
       </div>
     </div>
