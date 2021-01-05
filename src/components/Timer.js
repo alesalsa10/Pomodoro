@@ -6,8 +6,8 @@ export default function Timer() {
   const [pomodoroTime, setPomodoroTime] = useState('25');
   const [shortBreak, setShortBreak] = useState('05');
   const [longBreak, setLongBreak] = useState('10');
-  const [minutes, setMinutes] = useState('00');
-  const [seconds, setSeconds] = useState('30');
+  const [minutes, setMinutes] = useState('25');
+  const [seconds, setSeconds] = useState('00');
   const [startCountdown, setStartCountdown] = useState(false);
   const [action, setAction] = useState('START');
   const [selected, setSelected] = useState('pomodoro');
@@ -25,6 +25,8 @@ export default function Timer() {
       bottom: 'auto',
       marginRight: '-50%',
       transform: 'translate(-50%, -50%)',
+      width: '400px',
+      borderRadius: '15px'
     },
     overlay: {
       backgroundColor: 'rgba(0,0,0,0)',
@@ -42,25 +44,23 @@ export default function Timer() {
   }
 
   function updateTime() {
-    if (startCountdown) {
-      if (minutes == 0 && seconds == 0) {
-        doneSound.play();
-        setStartCountdown(false);
-        setAction('DONE');
-      } else {
-        if (seconds == 0) {
-          if (minutes > 0 && minutes <= 10) {
-            setSeconds(59);
-            setMinutes(`0${minutes - 1}`);
-          } else {
-            setSeconds(59);
-            setMinutes(minutes - 1);
-          }
-        } else if (seconds > 0 && seconds <= 10) {
-          setSeconds(`0${seconds - 1}`);
-        } else if (seconds > 10) {
-          setSeconds(seconds - 1);
+    if (minutes == 0 && seconds == 0) {
+      doneSound.play();
+      setStartCountdown(false);
+      setAction('DONE');
+    } else {
+      if (seconds == 0) {
+        if (minutes > 0 && minutes <= 10) {
+          setSeconds(59);
+          setMinutes(`0${minutes - 1}`);
+        } else {
+          setSeconds(59);
+          setMinutes(minutes - 1);
         }
+      } else if (seconds > 0 && seconds <= 10) {
+        setSeconds(`0${seconds - 1}`);
+      } else if (seconds > 10) {
+        setSeconds(seconds - 1);
       }
     }
   }
@@ -74,10 +74,6 @@ export default function Timer() {
       setAction('START');
     }
   };
-
-  useEffect(() => {
-    setTotalTime(parseInt(minutes) * 60 + parseInt(seconds));
-  }, [selected, indicator]);
 
   const handleClicks = (e) => {
     setStartCountdown(false);
@@ -96,10 +92,23 @@ export default function Timer() {
     }
   };
 
+  
+
   useEffect(() => {
-    const interval2 = setInterval(updateTime, 1000);
-    return () => clearInterval(interval2);
-  }, [startCountdown, seconds, minutes]);
+    setTotalTime(parseInt(minutes) * 60 + parseInt(seconds));
+  }, [selected, indicator]);
+
+  
+  useEffect(() => {
+    const interval = setTimeout(function () {
+      if (!startCountdown) {
+        //do nothing
+      } else {
+        updateTime();
+      }
+    }, 1000);
+    return ()=> interval
+  }, [startCountdown, seconds]);
 
   return (
     <div>
@@ -221,9 +230,18 @@ export default function Timer() {
             <button>the modal</button>
           </form> */}
           <div className='configureTimes'>
-            <div className='pomodoro'></div>
-            <div className='shortBreak'></div>
-            <div className='longBreak'></div>
+            <div className='pomodoro'>
+              <div className="header">pomodoro</div>
+              <input type="number" name="pomodoro" id="pomodoro" defaultValue={parseInt(pomodoroTime)} max='60' min='5' />
+            </div>
+            <div className='shortBreak'>
+              <div className="header">short break</div>
+              <input type="number" name="shortBreak" id="shortBreak" defaultValue={parseInt(shortBreak)} max='15' min='1' />
+            </div>
+            <div className='longBreak'>
+              <div className="header">long break</div>
+              <input type="number" name="longBreak" id="longBreak" defaultValue={parseInt(longBreak)} max='25' min='5' />
+            </div>
           </div>
         </Modal>
       </div>
