@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import audio from '../sounds/done.mp3';
 import Modal from 'react-modal';
+import Navbar from '../components/Navbar';
+
 
 export default function Timer() {
   const [pomodoroTime, setPomodoroTime] = useState('25');
@@ -89,11 +91,14 @@ export default function Timer() {
     }
   };
 
+  let interval;
+
   const handleTimeClicks = (e) => {
     setStartCountdown(false);
     setIndicator(Math.floor(Math.random() * 1000));
     setSeconds('00');
     setAction('START');
+    clearTimeout(interval)
     if (e.target.id === 'pomodoro') {
       setMinutes(pomodoroTime);
       setSelected('pomodoro');
@@ -147,12 +152,14 @@ export default function Timer() {
     closeModal();
   };
 
+  
+
   useEffect(() => {
     setTotalTime(parseInt(minutes) * 60 + parseInt(seconds));
   }, [selected, indicator]);
 
   useEffect(() => {
-    const interval = setTimeout(function () {
+    interval = setTimeout(function () {
       if (!startCountdown) {
         //do nothing
         
@@ -180,12 +187,12 @@ export default function Timer() {
     longBreak,
   ]);
 
+
   return (
     <div
-      className={`${
-        font === 'roboto' ? 'roboto' : font === 'lato' ? 'lato' : 'xanhMono'
-      }`}
+      className={`${font}`}
     >
+      <Navbar/>
       <div className={`${'timerCard'}`}>
         <div className='buttons-div'>
           <div
@@ -293,13 +300,7 @@ export default function Timer() {
           contentLabel='Settings Modal'
         >
           <div
-            className={`${
-              font === 'roboto'
-                ? 'roboto'
-                : font === 'lato'
-                ? 'lato'
-                : 'xanhMono'
-            }`}
+            className={font}
           >
             <h2>Settings</h2>
             <h4>TIME (MINUTES)</h4>
@@ -344,26 +345,26 @@ export default function Timer() {
             <div className='configureFont'>
               <h4 className='header fontColor '>FONT</h4>
               <div
-                className='roboto fonts'
+                className={`${'roboto fonts'} ${fontSetting === 'roboto' ? 'selectedFont' : ''} `}
                 id='roboto'
                 onClick={handleFontClick}
               >
                 Aa
               </div>
               <div
-                className='xanhMono fonts'
+                className={`${'xanhMono fonts'} ${fontSetting === 'xanhMono' ? 'selectedFont': '' } `}
                 id='xanhMono'
                 onClick={handleFontClick}
               >
                 Aa
               </div>
-              <div className='lato fonts' id='lato' onClick={handleFontClick}>
+              <div className={`{${'lato fonts'} ${fontSetting === 'lato' ? 'selectedFont': ''} `} id='lato' onClick={handleFontClick}>
                 Aa
               </div>
             </div>
             <div className='configureColor'>
               <h4 className='header fontColor '>COLOR</h4>
-              <div className='color colorRed '>Aa</div>
+              <div className={'color colorRed'}>Aa</div>
               <div className='color colorBlue '>Aa</div>
               <div className='color colorPurple '>Aa</div>
             </div>
