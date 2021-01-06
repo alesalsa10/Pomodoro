@@ -54,7 +54,8 @@ export default function Timer() {
       setAction('DONE');
     } else {
       if (seconds == 0) {
-        if (parseInt(minutes) > 0 && parseInt(minutes) < 10) {
+        if (minutes > 0 &&  minutes <= 10) {
+          console.log('here')
           setSeconds(59);
           setMinutes(`0${minutes - 1}`);
         } else {
