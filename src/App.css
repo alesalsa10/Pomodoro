@@ -1,3 +1,19 @@
+body{
+  font-family: sans-serif;
+}
+
+.roboto{
+  font-family: 'Roboto', sans-serif;
+}
+
+.xanhMono{
+  font-family: 'Xanh Mono', sans-serif;
+}
+
+.lato{
+  font-family: 'Lato', sans-serif;
+}
+
 :root{
   --red: #f87070;
   --purple: #d981f9;
@@ -16,7 +32,7 @@ body {
   color: white;
 }
 
-.timer-card {
+.timerCard {
   text-align: center;
 }
 
@@ -128,6 +144,15 @@ input[type="number"]::-webkit-inner-spin-button {
   margin: 0;
   height: 35px;
   line-height: 35px;
+  color: grey;
+}
+
+.fontColor{
+  color: black
+}
+
+.fonts{
+  cursor: pointer;
 }
 
 .color{
