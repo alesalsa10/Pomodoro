@@ -30,22 +30,6 @@ export default function Timer() {
 
   let doneSound = new Audio(audio);
 
-  /* const customStyles = {
-    content: {
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
-      width: '400px',
-      borderRadius: '15px',
-    },
-    overlay: {
-      backgroundColor: 'rgba(0,0,0,0)',
-    },
-  };
- */
   Modal.setAppElement('body');
 
   function openModal() {
@@ -257,7 +241,7 @@ export default function Timer() {
           </div>
         </div>
 
-        <svg viewBox='0 0 10 10' width='30%'>
+        <svg viewBox='0 0 10 10' /* width='30%' */ className='svg' >
           <circle
             cx='5'
             cy='5'
@@ -329,7 +313,6 @@ export default function Timer() {
         <Modal
           isOpen={modalIsOpen}
           onRequestClose={closeModal}
-          /* style={customStyles} */
           className='Modal'
           overlayClassName='Overlay'
           contentLabel='Settings Modal'

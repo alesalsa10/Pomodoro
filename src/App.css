@@ -251,8 +251,23 @@ input[type='number']::-webkit-inner-spin-button {
   background-color: var(--purple);
 }
 
+.svg{
+  width: 450px;
+}
+
 @keyframes rotate {
   to {
     stroke-dashoffset: 21;
   }
 }
+
+@media only screen and (max-width: 500px) {
+  .Modal {
+    width: 85%;
+  }
+  .svg{
+    width: 75%;
+  }
+}
+
+
