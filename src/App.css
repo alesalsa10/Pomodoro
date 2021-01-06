@@ -1,23 +1,23 @@
-body{
+body {
   font-family: sans-serif;
 }
 
-.roboto{
+.roboto {
   font-family: 'Roboto', sans-serif;
 }
 
-.xanhMono{
+.xanhMono {
   font-family: 'Xanh Mono', sans-serif;
 }
 
-.lato{
+.lato {
   font-family: 'Lato', sans-serif;
 }
 
-:root{
+:root {
   --red: #f87070;
   --purple: #d981f9;
-  --blue:  #74f2f7;
+  --blue: #74f2f7;
 }
 
 body {
@@ -62,8 +62,20 @@ body {
 
 .selected {
   border-radius: 20px;
-  background-color: #f57172;
   padding: 0.5rem;
+  color: black;
+}
+
+.selectedRed {
+  background-color: var(--red);
+}
+
+.selectedBlue {
+  background-color: var(--blue);
+}
+
+.selectedPurple {
+  background-color: var(--purple);
 }
 
 .circle {
@@ -88,16 +100,39 @@ body {
   cursor: pointer;
 }
 
-.modal {
-  background-color: none;
+.Modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  border-radius: 15px;
+  background-color: white;
+  padding: 1rem;
 }
+
+.Modal:focus{
+  outline: none;
+}
+
+.Overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
 
 .configureTimes {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
 }
 
-input[type="number"] {
+input[type='number'] {
   height: 32px;
   width: 80%;
   border-radius: 4px;
@@ -113,7 +148,7 @@ input[type="number"] {
   caret-color: transparent;
 }
 
-input[type="number"]::-webkit-inner-spin-button {
+input[type='number']::-webkit-inner-spin-button {
   -webkit-appearance: none !important;
   opacity: 1 !important;
   background: transparent !important;
@@ -125,21 +160,21 @@ input[type="number"]::-webkit-inner-spin-button {
   cursor: pointer;
 }
 
-.configureFont{
+.configureFont {
   margin-top: 2rem;
   margin-bottom: 2rem;
   display: grid;
-  grid-template-columns: 60% repeat(3, auto)
+  grid-template-columns: 60% repeat(3, auto);
 }
 
-.configureColor{
+.configureColor {
   margin-top: 1rem;
   margin-bottom: 2rem;
   display: grid;
-  grid-template-columns: 60% repeat(3, auto)
+  grid-template-columns: 60% repeat(3, auto);
 }
 
-.header{
+.header {
   padding: 0;
   margin: 0;
   height: 35px;
@@ -147,46 +182,51 @@ input[type="number"]::-webkit-inner-spin-button {
   color: grey;
 }
 
-.fontColor{
-  color: black
+.fontColor {
+  color: black;
 }
 
-.fonts{
+.fonts {
   cursor: pointer;
 }
 
-.selectedFont{
+.selectedFont {
   border-radius: 50%;
   width: 35px;
   height: 35px;
   text-align: center;
   line-height: 35px;
   background-color: black;
-  color: white
+  color: white;
 }
 
-.color{
+.color {
   border-radius: 50%;
   width: 35px;
   height: 35px;
   text-align: center;
   line-height: 35px;
+  cursor: pointer;
 }
 
-.colorRed{
+.colorRed {
   background-color: var(--red);
 }
 
-.colorBlue{
+.checked::before {
+  content: '✔';
+}
+
+.colorBlue {
   background-color: var(--blue);
 }
 
-.colorPurple{
+.colorPurple {
   background: var(--purple);
 }
 
-.applyButton{
-  background-color: #f87070;
+.applyButton {
+  /* background-color: #f87070; */
   width: 80px;
   padding: 1rem;
   border-bottom-right-radius: 60px 50px;
@@ -197,6 +237,18 @@ input[type="number"]::-webkit-inner-spin-button {
   margin: auto;
   font-weight: 700;
   cursor: pointer;
+}
+
+.applyRed {
+  background-color: var(--red);
+}
+
+.applyBlue {
+  background-color: var(--blue);
+}
+
+.applyPurple {
+  background-color: var(--purple);
 }
 
 @keyframes rotate {

@@ -3,7 +3,6 @@ import audio from '../sounds/done.mp3';
 import Modal from 'react-modal';
 import Navbar from '../components/Navbar';
 
-
 export default function Timer() {
   const [pomodoroTime, setPomodoroTime] = useState('25');
   const [shortBreak, setShortBreak] = useState('05');
@@ -19,6 +18,9 @@ export default function Timer() {
   const [font, setFont] = useState('roboto');
   const [fontSetting, setFontSetting] = useState(font);
 
+  const [color, setColor] = useState('red');
+  const [colorSetting, setColorSetting] = useState(color);
+
   const [startCountdown, setStartCountdown] = useState(false);
   const [action, setAction] = useState('START');
   const [selected, setSelected] = useState('pomodoro');
@@ -28,7 +30,7 @@ export default function Timer() {
 
   let doneSound = new Audio(audio);
 
-  const customStyles = {
+  /* const customStyles = {
     content: {
       top: '50%',
       left: '50%',
@@ -43,7 +45,7 @@ export default function Timer() {
       backgroundColor: 'rgba(0,0,0,0)',
     },
   };
-
+ */
   Modal.setAppElement('body');
 
   function openModal() {
@@ -57,6 +59,8 @@ export default function Timer() {
     setAction('START');
     setIsOpen(false);
     setIndicator(Math.floor(Math.random() * 1000));
+    setFontSetting(font);
+    setColorSetting(color);
   }
 
   function updateTime() {
@@ -98,7 +102,7 @@ export default function Timer() {
     setIndicator(Math.floor(Math.random() * 1000));
     setSeconds('00');
     setAction('START');
-    clearTimeout(interval)
+    clearTimeout(interval);
     if (e.target.id === 'pomodoro') {
       setMinutes(pomodoroTime);
       setSelected('pomodoro');
@@ -143,16 +147,25 @@ export default function Timer() {
     }
   };
 
+  const handleColorClick = (e) => {
+    if (e.target.id === 'red') {
+      setColorSetting('red');
+    } else if (e.target.id === 'blue') {
+      setColorSetting('blue');
+    } else {
+      setColorSetting('purple');
+    }
+  };
+
   const handleApplySettings = (e) => {
     setSeconds('00');
     setPomodoroTime(pomodoroSetting);
     setShortBreak(shortBreakSetting);
     setLongBreak(longBreakSetting);
     setFont(fontSetting);
-    closeModal();
+    setColor(colorSetting);
+    setIsOpen(false);
   };
-
-  
 
   useEffect(() => {
     setTotalTime(parseInt(minutes) * 60 + parseInt(seconds));
@@ -162,7 +175,6 @@ export default function Timer() {
     interval = setTimeout(function () {
       if (!startCountdown) {
         //do nothing
-        
       } else {
         updateTime();
       }
@@ -187,17 +199,22 @@ export default function Timer() {
     longBreak,
   ]);
 
-
   return (
-    <div
-      className={`${font}`}
-    >
-      <Navbar/>
+    <div className={`${font}`}>
+      <Navbar />
       <div className={`${'timerCard'}`}>
         <div className='buttons-div'>
           <div
             className={`${'buttons'} ${
               selected === 'pomodoro' ? 'selected' : ''
+            } ${
+              color === 'red' && selected === 'pomodoro'
+                ? 'selectedRed'
+                : color === 'blue' && selected === 'pomodoro'
+                ? 'selectedBlue'
+                : color === 'purple' && selected === 'pomodoro'
+                ? 'selectedPurple'
+                : ''
             } `}
             id='pomodoro'
             onClick={handleTimeClicks}
@@ -207,6 +224,14 @@ export default function Timer() {
           <div
             className={`${'buttons'} ${
               selected === 'shortBreak' ? 'selected' : ''
+            }  ${
+              color === 'red' && selected === 'shortBreak'
+                ? 'selectedRed'
+                : color === 'blue' && selected === 'shortBreak'
+                ? 'selectedBlue'
+                : color === 'purple' && selected === 'shortBreak'
+                ? 'selectedPurple'
+                : ''
             } `}
             id='short-break'
             onClick={handleTimeClicks}
@@ -216,6 +241,14 @@ export default function Timer() {
           <div
             className={`${'buttons'} ${
               selected === 'longBreak' ? 'selected' : ''
+            }  ${
+              color === 'red' && selected === 'longBreak'
+                ? 'selectedRed'
+                : color === 'blue' && selected === 'longBreak'
+                ? 'selectedBlue'
+                : color === 'purple' && selected === 'longBreak'
+                ? 'selectedPurple'
+                : ''
             } `}
             id='long-break'
             onClick={handleTimeClicks}
@@ -296,12 +329,12 @@ export default function Timer() {
         <Modal
           isOpen={modalIsOpen}
           onRequestClose={closeModal}
-          style={customStyles}
+          /* style={customStyles} */
+          className='Modal'
+          overlayClassName='Overlay'
           contentLabel='Settings Modal'
         >
-          <div
-            className={font}
-          >
+          <div className={font}>
             <h2>Settings</h2>
             <h4>TIME (MINUTES)</h4>
             <div className='configureTimes'>
@@ -345,30 +378,67 @@ export default function Timer() {
             <div className='configureFont'>
               <h4 className='header fontColor '>FONT</h4>
               <div
-                className={`${'roboto fonts'} ${fontSetting === 'roboto' ? 'selectedFont' : ''} `}
+                className={`${'roboto fonts'} ${
+                  fontSetting === 'roboto' ? 'selectedFont' : ''
+                } `}
                 id='roboto'
                 onClick={handleFontClick}
               >
                 Aa
               </div>
               <div
-                className={`${'xanhMono fonts'} ${fontSetting === 'xanhMono' ? 'selectedFont': '' } `}
+                className={`${'xanhMono fonts'} ${
+                  fontSetting === 'xanhMono' ? 'selectedFont' : ''
+                } `}
                 id='xanhMono'
                 onClick={handleFontClick}
               >
                 Aa
               </div>
-              <div className={`{${'lato fonts'} ${fontSetting === 'lato' ? 'selectedFont': ''} `} id='lato' onClick={handleFontClick}>
+              <div
+                className={`{${'lato fonts'} ${
+                  fontSetting === 'lato' ? 'selectedFont' : ''
+                } `}
+                id='lato'
+                onClick={handleFontClick}
+              >
                 Aa
               </div>
             </div>
             <div className='configureColor'>
               <h4 className='header fontColor '>COLOR</h4>
-              <div className={'color colorRed'}>Aa</div>
-              <div className='color colorBlue '>Aa</div>
-              <div className='color colorPurple '>Aa</div>
+              <div
+                className={`${'color colorRed'} ${
+                  colorSetting === 'red' ? 'checked' : ''
+                } `}
+                id='red'
+                onClick={handleColorClick}
+              ></div>
+              <div
+                className={`${'color colorBlue'} ${
+                  colorSetting === 'blue' ? 'checked' : ''
+                } `}
+                id='blue'
+                onClick={handleColorClick}
+              ></div>
+              <div
+                className={`${'color colorPurple'} ${
+                  colorSetting === 'purple' ? 'checked' : ''
+                } `}
+                id='purple'
+                onClick={handleColorClick}
+              ></div>
             </div>
-            <div className='applyButton' onClick={handleApplySettings}>
+            <div
+              className={`${'applyButton'} ${
+                colorSetting === 'red'
+                  ? 'applyRed'
+                  : colorSetting === 'blue'
+                  ? 'applyBlue'
+                  : 'applyPurple'
+              } `}
+              onClick={handleApplySettings}
+            >
               Apply
             </div>
           </div>
