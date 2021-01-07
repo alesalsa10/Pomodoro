@@ -90,6 +90,18 @@ body {
   transform-origin: 50% 50%;
 }
 
+.redCircle{
+  stroke: var(--red)
+}
+
+.blueCircle{
+  stroke: var(--blue)
+}
+
+.purpleCircle{
+  stroke: var(--purple)
+}
+
 .settingsImage {
   text-align: center;
   margin-top: 1rem;
@@ -102,10 +114,10 @@ body {
 
 .Modal {
   position: absolute;
-  top: 50%;
+  top: 280px;
   left: 50%;
   right: auto;
-  bottom: auto;
+  /* bottom: auto; */
   margin-right: -50%;
   transform: translate(-50%, -50%);
   width: 400px;

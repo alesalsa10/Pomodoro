@@ -261,13 +261,13 @@ export default function Timer() {
           />
 
           <circle
-            className='circle'
+            className={`${'circle'}  ${color === 'red' ? 'redCircle': color === 'blue'? 'blueCircle': 'purpleCircle'} `}
             cx='5'
             cy='5'
             r='3.3'
             key={indicator}
             fill='none'
-            stroke='#f57172'
+            /* stroke='#f57172' */
             strokeWidth='0.3'
             style={{
               animationDuration: `${totalTime}s `,
