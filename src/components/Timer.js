@@ -4,7 +4,7 @@ import Modal from 'react-modal';
 import Navbar from '../components/Navbar';
 
 export default function Timer() {
-  const [pomodoroTime, setPomodoroTime] = useState('00');
+  const [pomodoroTime, setPomodoroTime] = useState('25');
   const [shortBreak, setShortBreak] = useState('05');
   const [longBreak, setLongBreak] = useState('10');
 
@@ -13,7 +13,7 @@ export default function Timer() {
   const [longBreakSetting, setLongBreakSetting] = useState(longBreak);
 
   const [minutes, setMinutes] = useState();
-  const [seconds, setSeconds] = useState('20');
+  const [seconds, setSeconds] = useState('00');
 
   const [font, setFont] = useState('roboto');
   const [fontSetting, setFontSetting] = useState(font);
