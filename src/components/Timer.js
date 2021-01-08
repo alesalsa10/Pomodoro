@@ -25,7 +25,7 @@ export default function Timer() {
   const [action, setAction] = useState('START');
   const [selected, setSelected] = useState('pomodoro');
   const [indicator, setIndicator] = useState();
-  const [totalTime, setTotalTime] = useState();
+  const [totalTime, setTotalTime] = useState(1500);
   const [modalIsOpen, setIsOpen] = useState(false);
 
   let doneSound = new Audio(audio);
@@ -39,10 +39,7 @@ export default function Timer() {
   }
 
   function closeModal() {
-    setStartCountdown(false);
-    setAction('START');
     setIsOpen(false);
-    setIndicator(Math.floor(Math.random() * 1000));
     setFontSetting(font);
     setColorSetting(color);
   }
@@ -143,6 +140,7 @@ export default function Timer() {
   };
 
   const handleApplySettings = (e) => {
+    setIndicator(Math.floor(Math.random() * 1000));
     setSeconds('00');
     setPomodoroTime(pomodoroSetting);
     setShortBreak(shortBreakSetting);
@@ -153,8 +151,15 @@ export default function Timer() {
   };
 
   useEffect(() => {
-    setTotalTime(parseInt(minutes) * 60 + parseInt(seconds));
-  }, [selected, indicator,minutes]);
+    //setTotalTime(parseInt(minutes) * 60 + parseInt(seconds));
+    if (selected === 'pomodoro'){
+      setTotalTime(parseInt(pomodoroTime) * 60) 
+    } else if (selected === 'shortBreak'){
+      setTotalTime(parseInt(shortBreak) * 60)
+    } else {
+      setTotalTime(parseInt(longBreak) * 60)
+    }
+  }, [selected, indicator]);
 
   useEffect(() => {
     interval = setTimeout(function () {
@@ -267,7 +272,6 @@ export default function Timer() {
             r='3.3'
             key={indicator}
             fill='none'
-            /* stroke='#f57172' */
             strokeWidth='0.3'
             style={{
               animationDuration: `${totalTime}s `,
