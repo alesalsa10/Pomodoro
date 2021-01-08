@@ -4,7 +4,7 @@ import Modal from 'react-modal';
 import Navbar from '../components/Navbar';
 
 export default function Timer() {
-  const [pomodoroTime, setPomodoroTime] = useState('25');
+  const [pomodoroTime, setPomodoroTime] = useState('00');
   const [shortBreak, setShortBreak] = useState('05');
   const [longBreak, setLongBreak] = useState('10');
 
@@ -13,7 +13,7 @@ export default function Timer() {
   const [longBreakSetting, setLongBreakSetting] = useState(longBreak);
 
   const [minutes, setMinutes] = useState();
-  const [seconds, setSeconds] = useState('00');
+  const [seconds, setSeconds] = useState('20');
 
   const [font, setFont] = useState('roboto');
   const [fontSetting, setFontSetting] = useState(font);
@@ -74,7 +74,7 @@ export default function Timer() {
     if (e.target.id === 'start') {
       setStartCountdown(true);
       setAction('PAUSE');
-    } else {
+    } else if (e.target.id === 'stop'){
       setStartCountdown(false);
       setAction('START');
     }
@@ -154,7 +154,7 @@ export default function Timer() {
 
   useEffect(() => {
     setTotalTime(parseInt(minutes) * 60 + parseInt(seconds));
-  }, [selected, indicator]);
+  }, [selected, indicator,minutes]);
 
   useEffect(() => {
     interval = setTimeout(function () {
@@ -296,7 +296,7 @@ export default function Timer() {
             fontSize='0.9px'
             onClick={handleStartStopClick}
             className={`${'startStop'} `}
-            id={`${startCountdown ? 'stop' : 'start'}`}
+            id={`${startCountdown && action === 'PAUSE' ? 'stop' : !startCountdown && action === 'START' ? 'start': 'done' }`}
           >
             {action}
           </text>

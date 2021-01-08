@@ -60,6 +60,10 @@ body {
   cursor: pointer;
 }
 
+#done{
+  cursor: default
+}
+
 .selected {
   border-radius: 20px;
   padding: 0.5rem;
@@ -269,7 +273,7 @@ input[type='number']::-webkit-inner-spin-button {
 
 @keyframes rotate {
   to {
-    stroke-dashoffset: 21;
+    stroke-dashoffset: 20.73;
   }
 }
 
