@@ -12,7 +12,7 @@ export default function Timer() {
   const [shortBreakSetting, setShortBreakSetting] = useState(shortBreak);
   const [longBreakSetting, setLongBreakSetting] = useState(longBreak);
 
-  const [minutes, setMinutes] = useState();
+  const [minutes, setMinutes] = useState('25');
   const [seconds, setSeconds] = useState('00');
 
   const [font, setFont] = useState('roboto');
@@ -32,6 +32,7 @@ export default function Timer() {
   const [modalIsOpen, setIsOpen] = useState(false);
 
   const [progress, setProgress] = useState(0);
+  const [offset, setOffset] = useState(0);
 
   let doneSound = new Audio(audio);
 
@@ -154,15 +155,31 @@ export default function Timer() {
     setIsOpen(false);
   };
 
-  const calculateProgress = () => {
-    let secondsLeft = (parseInt(minutes) * 60) + seconds;
-    setProgress(100 - (secondsLeft/totalTime) * 100)
+  const calculateProgress = (min, sec) => {
+    let secondsLeft = parseInt(min * 60 + parseInt(sec));
+    if (totalTime === secondsLeft){
+      setProgress(0)
+    }else {
+      setProgress(100 - (secondsLeft * 100 / totalTime))
+    }
   }
 
   useEffect(()=>{
-    const int = setInterval(calculateProgress(), 50);
+    const int = setInterval(calculateProgress(minutes, seconds), 50);
     return () => clearInterval(int);
   })
+
+  
+  useEffect(() => {
+    let secondsLeft = parseInt(minutes * 60 + parseInt(seconds));
+    if (totalTime === secondsLeft){
+      setOffset(0)
+    } else {
+      const progressOffset = 20.73- (((100 - progress) / 100) * 20.73);
+      setOffset(progressOffset);
+    }
+    
+  }, [progress, offset, setOffset]);
 
 
   useEffect(() => {
@@ -291,12 +308,8 @@ export default function Timer() {
             fill='none'
             strokeWidth='0.3'
             style={{
-              /* animationDuration: `${totalTime}s `,
-              animationPlayState: `${
-                startCountdown ? 'running' : 'paused'
-              }`, */
               strokeDasharray: `${20.73}`,
-              strokeDashoffset:`${20.73}`
+              strokeDashoffset:`${offset}`,
             }}
           />
 
