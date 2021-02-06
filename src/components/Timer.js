@@ -18,15 +18,20 @@ export default function Timer() {
   const [font, setFont] = useState('roboto');
   const [fontSetting, setFontSetting] = useState(font);
 
+
   const [color, setColor] = useState('red');
   const [colorSetting, setColorSetting] = useState(color);
-
+  
   const [startCountdown, setStartCountdown] = useState(false);
+
+
   const [action, setAction] = useState('START');
   const [selected, setSelected] = useState('pomodoro');
   const [indicator, setIndicator] = useState();
   const [totalTime, setTotalTime] = useState(1500);
   const [modalIsOpen, setIsOpen] = useState(false);
+
+  const [progress, setProgress] = useState(0);
 
   let doneSound = new Audio(audio);
 
@@ -52,7 +57,6 @@ export default function Timer() {
     } else {
       if (seconds == 0) {
         if (minutes > 0 &&  minutes <= 10) {
-          console.log('here')
           setSeconds(59);
           setMinutes(`0${minutes - 1}`);
         } else {
@@ -150,6 +154,17 @@ export default function Timer() {
     setIsOpen(false);
   };
 
+  const calculateProgress = () => {
+    let secondsLeft = (parseInt(minutes) * 60) + seconds;
+    setProgress(100 - (secondsLeft/totalTime) * 100)
+  }
+
+  useEffect(()=>{
+    const int = setInterval(calculateProgress(), 50);
+    return () => clearInterval(int);
+  })
+
+
   useEffect(() => {
     //setTotalTime(parseInt(minutes) * 60 + parseInt(seconds));
     if (selected === 'pomodoro'){
@@ -169,8 +184,10 @@ export default function Timer() {
         updateTime();
       }
     }, 1000);
-    return () => interval;
+    return () => clearTimeout(interval);
   }, [startCountdown, seconds, minutes]);
+
+  
 
   useEffect(() => {
     if (selected === 'pomodoro') {
@@ -247,7 +264,7 @@ export default function Timer() {
           </div>
         </div>
 
-        <svg viewBox='0 0 10 10' /* width='30%' */ className='svg' >
+        <svg viewBox='0 0 10 10' className='svg' >
           <circle
             cx='5'
             cy='5'
@@ -274,10 +291,12 @@ export default function Timer() {
             fill='none'
             strokeWidth='0.3'
             style={{
-              animationDuration: `${totalTime}s `,
+              /* animationDuration: `${totalTime}s `,
               animationPlayState: `${
-                action === 'START' ? 'paused' : 'running'
-              }`,
+                startCountdown ? 'running' : 'paused'
+              }`, */
+              strokeDasharray: `${20.73}`,
+              strokeDashoffset:`${20.73}`
             }}
           />
 
