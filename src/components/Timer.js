@@ -33,6 +33,7 @@ export default function Timer() {
 
   const [progress, setProgress] = useState(0);
   const [offset, setOffset] = useState(0);
+  const [secondsLeft, setSecondsLeft] = useState(parseInt(minutes * 60) + parseInt(seconds))
 
   let doneSound = new Audio(audio);
 
@@ -85,10 +86,10 @@ export default function Timer() {
   let interval;
 
   const handleTimeClicks = (e) => {
-    setStartCountdown(false);
+    setStartCountdown(true);
     setIndicator(Math.floor(Math.random() * 1000));
     setSeconds('00');
-    setAction('START');
+    setAction('PAUSE');
     clearTimeout(interval);
     if (e.target.id === 'pomodoro') {
       setMinutes(pomodoroTime);
@@ -155,37 +156,29 @@ export default function Timer() {
     setIsOpen(false);
   };
 
-  const calculateProgress = (min, sec) => {
-    let secondsLeft = parseInt(min * 60 + parseInt(sec));
+  const calculateProgress = () => {
+    setSecondsLeft(parseInt(minutes * 60) + parseInt(seconds))
+    
     if (totalTime === secondsLeft){
-      setProgress(0)
+      setProgress(0);
+      setOffset(0);
     }else {
-      setProgress(100 - (secondsLeft * 100 / totalTime))
+      setProgress(100 - (secondsLeft * 100 / totalTime));
+      const progressOffset = 20.73 - (((100 - progress) / 100) * 20.73);
+      setOffset(progressOffset);
     }
   }
 
   useEffect(()=>{
-    const int = setInterval(calculateProgress(minutes, seconds), 50);
+    const int = setInterval(calculateProgress(minutes, seconds), 500);
     return () => clearInterval(int);
   })
 
-  
-  useEffect(() => {
-    let secondsLeft = parseInt(minutes * 60 + parseInt(seconds));
-    if (totalTime === secondsLeft){
-      setOffset(0)
-    } else {
-      const progressOffset = 20.73- (((100 - progress) / 100) * 20.73);
-      setOffset(progressOffset);
-    }
-    
-  }, [progress, offset, setOffset]);
 
 
   useEffect(() => {
-    //setTotalTime(parseInt(minutes) * 60 + parseInt(seconds));
     if (selected === 'pomodoro'){
-      setTotalTime(parseInt(pomodoroTime) * 60) 
+      setTotalTime(parseInt(pomodoroTime) * 60)
     } else if (selected === 'shortBreak'){
       setTotalTime(parseInt(shortBreak) * 60)
     } else {
@@ -209,10 +202,13 @@ export default function Timer() {
   useEffect(() => {
     if (selected === 'pomodoro') {
       setMinutes(pomodoroTime);
+      setSecondsLeft(parseInt(minutes) * 60)
     } else if (selected === 'shortBreak') {
       setMinutes(shortBreak);
+      setSecondsLeft(parseInt(minutes) * 60)
     } else {
       setMinutes(longBreak);
+      setSecondsLeft(parseInt(minutes) * 60)
     }
   }, [
     pomodoroSetting,
@@ -221,6 +217,7 @@ export default function Timer() {
     pomodoroTime,
     shortBreak,
     longBreak,
+    indicator
   ]);
 
   return (
