@@ -31,6 +31,9 @@ export default function Timer() {
   const [totalTime, setTotalTime] = useState(1500);
   const [modalIsOpen, setIsOpen] = useState(false);
 
+  const [secondsLeft, setSecondsLeft] = useState(parseInt(minutes * 60 + parseInt(seconds)));
+  const [milliseconds, setMilliseconds] = useState(0.100)
+
   const [progress, setProgress] = useState(0);
   const [offset, setOffset] = useState(0);
 
@@ -85,10 +88,10 @@ export default function Timer() {
   let interval;
 
   const handleTimeClicks = (e) => {
-    setStartCountdown(false);
+    setStartCountdown(true);
     setIndicator(Math.floor(Math.random() * 1000));
     setSeconds('00');
-    setAction('START');
+    setAction('PAUSE');
     clearTimeout(interval);
     if (e.target.id === 'pomodoro') {
       setMinutes(pomodoroTime);
@@ -155,31 +158,46 @@ export default function Timer() {
     setIsOpen(false);
   };
 
+  const calculateMill = () =>{ 
+    console.log(milliseconds)
+    if (milliseconds < 0.99){
+      for (let i = 0; i < 10; i++){
+        setMilliseconds(milliseconds + 0.100)
+      }
+    } else {
+      setMilliseconds(0.100)
+      for (let i = 0; i < 10; i++){
+        setMilliseconds(milliseconds + 0.100)
+      }
+    }
+    
+  }
+
+  /* useEffect(()=>{
+    let int = setInterval(calculateMill(), 100)
+    return()=>clearInterval(int)
+  }) */
+  
   const calculateProgress = (min, sec) => {
-    let secondsLeft = parseInt(min * 60 + parseInt(sec));
+    calculateMill();
     if (totalTime === secondsLeft){
-      setProgress(0)
+      setProgress(0);
+      setOffset(0);
     }else {
-      setProgress(100 - (secondsLeft * 100 / totalTime))
+        setSecondsLeft(parseFloat(min * 60 + parseFloat(sec + milliseconds)));
+        setProgress(100 - (secondsLeft * 100 / totalTime));
+        const progressOffset = 20.73 - (((100 - progress) / 100) * 20.73);
+        setOffset(progressOffset);
     }
   }
 
+  
   useEffect(()=>{
-    const int = setInterval(calculateProgress(minutes, seconds), 50);
+    const int = setInterval(calculateProgress(minutes, seconds), 100);
     return () => clearInterval(int);
   })
 
   
-  useEffect(() => {
-    let secondsLeft = parseInt(minutes * 60 + parseInt(seconds));
-    if (totalTime === secondsLeft){
-      setOffset(0)
-    } else {
-      const progressOffset = 20.73- (((100 - progress) / 100) * 20.73);
-      setOffset(progressOffset);
-    }
-    
-  }, [progress, offset, setOffset]);
 
 
   useEffect(() => {
